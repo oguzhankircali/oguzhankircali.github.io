@@ -5,6 +5,5 @@
  */
 
 module.exports = {
-  plugins: [`@nehalist/gatsby-theme-nehalem`],
-  pathPrefix: "/new-blog",
+  plugins: [`@nehalist/gatsby-theme-nehalem`]
 };
