@@ -7,8 +7,8 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build Gatsby Site
-      uses: jzweifel/gatsby-cli-github-action@master
+      uses: oguzhankircali/oguzhankircali.github.io@master
       env:
-        GATSBY_PROJECT_PATH: "./client"
+        GATSBY_PROJECT_PATH: "./public"
       with:
         gatsby-arg: build
