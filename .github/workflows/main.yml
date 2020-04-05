@@ -16,7 +16,7 @@ jobs:
       - name: gatsby build
         env:
           GH_API_KEY: ${{ secrets.BLOG_API_KEY }}
-        run: yarn run deploy
+        run: yarn run build --if-present
 
       - name: deploy
         uses: maxheld83/ghpages@v0.2.1
