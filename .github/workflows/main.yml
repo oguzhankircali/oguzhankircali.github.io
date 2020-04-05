@@ -1,26 +1,14 @@
-on:
-  push:
-    branches:
-      - master
-name: build gatsby
+on: push
+name: Build Gatsby Site in Subdirectory
 jobs:
-  build_gatsby:
-    name: build
+  build:
+    name: Build Gatsby Site
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-
-      - name: yarn install
-        run: yarn install
-
-      - name: gatsby build
-        env:
-          GH_API_KEY: ${{ secrets.BLOG_API_KEY }}
-        run: yarn run deploy
-
-      - name: deploy
-        uses: maxheld83/ghpages@v0.2.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_PAT: ${{ secrets.BLOG_API_KEY }}
-          BUILD_DIR: "./public/"
+    - uses: actions/checkout@master
+    - name: Build Gatsby Site
+      uses: jzweifel/gatsby-cli-github-action@master
+      env:
+        GATSBY_PROJECT_PATH: "./client"
+      with:
+        gatsby-arg: build
