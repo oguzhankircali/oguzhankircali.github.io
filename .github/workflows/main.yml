@@ -1,26 +1,36 @@
+name: github pages
+
 on:
   push:
     branches:
       - master
-name: build gatsby
+
 jobs:
-  build_gatsby:
-    name: build
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: yarn install --prod --pure-lockfile
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
 
-      - name: gatsby build
-        env:
-          GH_API_KEY: ${{ secrets.BLOG_API_KEY }}
-        run: yarn run build --if-present
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-      - name: deploy
-        uses: maxheld83/ghpages@v0.2.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_PAT: ${{ secrets.BLOG_API_KEY }}
-          BUILD_DIR: "public/"
+      - run: npm ci
+      - run: npm run format
+      - run: npm run test
+      - run: npm run build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
